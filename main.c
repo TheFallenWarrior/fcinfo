@@ -1,3 +1,9 @@
+/*
+	fcinfo
+	Copyright 2024 TheFallenWarrior
+	Lincensed under MIT/Expat
+*/
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
