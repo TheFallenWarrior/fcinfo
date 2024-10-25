@@ -183,14 +183,14 @@ typedef enum options{
 
 void printUsage(){
 	printf(
-		"Display information about a FC/NES rom file\n"
+		"Display information about a FC/NES ROM file\n"
 		"Usage: fcinfo [option] rom\n\n"
 		"'option' is one of:\n"
-		"\t-a\tShow all information\n"
+		"\t-a\tShow all available information\n"
 		"\t-H\tDisplay iNES/NES 2.0 header information [default]\n"
 		"\t-o\tDisplay official header information (if present)\n"
 		"\t-s\tDisplay free ROM space\n"
-		"\t-V\tDisplay hardware vectors\n"
+		"\t-V\tDisplay hardware vectors\n\n"
 	);
 }
 
@@ -225,11 +225,11 @@ void readHWVectors(FILE *rom){
 
 void countEmptySpace(FILE *rom){
 	if(prgSize != MIN(prgSize, 255)){
-		fprintf(stderr, "Warning: PRG ROM Size > 256 x 16 KiB is not supported.");
+		fprintf(stderr, "Warning: PRG ROM Size > 256 x 16 KiB is not supported.\n");
 		prgSize = MIN(prgSize, 255);
 	}
 	if(chrSize != MIN(chrSize, 255)){
-		fprintf(stderr, "Warning: CHR ROM Size > 256 x 8 KiB is not supported.");
+		fprintf(stderr, "Warning: CHR ROM Size > 256 x 8 KiB is not supported.\n");
 		chrSize = MIN(chrSize, 255);
 	}
 	// Count empty space in PRG ROM
