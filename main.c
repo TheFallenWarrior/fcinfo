@@ -61,9 +61,37 @@ const char *const vsSystemTypes[] = {
 	"Raid on the Bungeling Bay"
 };
 
+const char *const officialPrgSizes[] = {
+	"64",
+	"16",
+	"32",
+	"128",
+	"256",
+	"512"
+};
+
+const char *const officialChrSizes[] = {
+	"8",
+	"16",
+	"32",
+	"64 or 128",
+	"256"
+};
+
+const char *const officialMapperNames[] = {
+	"NROM",
+	"CNROM",
+	"UNROM",
+	"GNROM",
+	"MMC"
+};
+
 // https://www.nesdev.org/wiki/INES
 // https://www.nesdev.org/wiki/NES_2.0
-uint8_t header[16];
+uint8_t iNesHeader[16];
+
+// https://www.nesdev.org/wiki/Nintendo_header
+uint8_t officialHeader[26];
 
 uint16_t vectors[3];
 
@@ -77,9 +105,13 @@ int mapper;
 int hasTrainer;
 int isNes2;
 
+int hasOfficialHeader;
+char gameTitle[16];
+
 typedef enum options{
 	OPT_VECTORS,
 	OPT_SPACE,
+	OPT_OFFICIAL,
 	OPT_INES,
 	OPT_ALL,
 } options;
@@ -91,22 +123,34 @@ void printUsage(){
 		"'option' is one of:\n"
 		"\t-a\tShow all information\n"
 		"\t-H\tDisplay iNES/NES 2.0 header information [default]\n"
+		"\t-o\tDisplay official header information (if present)\n"
 		"\t-s\tDisplay free ROM space\n"
 		"\t-V\tDisplay hardware vectors\n"
 	);
 }
 
 void readINesHader(FILE *rom){
-	fread(header, 16, 1, rom);
-	if(memcmp(header, "NES\x1a", 4)){
+	fread(iNesHeader, 16, 1, rom);
+	if(memcmp(iNesHeader, "NES\x1a", 4)){
 		fprintf(stderr, "File provided isn't an NES rom.\n");
 		exit(1);
 	}
-	isNes2 = header[7]&0x08 && header[7]&~0x04;
-	mapper = (header[6]>>4) | (header[7]&0xf0) | (isNes2 ? (header[8]&0xf)<<8 : 0);
-	hasTrainer = (header[6]&0x04);
-	prgSize = header[4] | (isNes2 ? header[9]&0x0f : 0);
-	chrSize = header[5] | (isNes2 ? header[9]>>4 : 0);
+	isNes2 = iNesHeader[7]&0x08 && iNesHeader[7]&~0x04;
+	mapper = (iNesHeader[6]>>4) | (iNesHeader[7]&0xf0) | (isNes2 ? (iNesHeader[8]&0xf)<<8 : 0);
+	hasTrainer = (iNesHeader[6]&0x04);
+	prgSize = iNesHeader[4] | (isNes2 ? iNesHeader[9]&0x0f : 0);
+	chrSize = iNesHeader[5] | (isNes2 ? iNesHeader[9]>>4 : 0);
+}
+
+void readOfficialHeader(FILE *rom){
+	fseek(rom, hasTrainer*512+16*1024*prgSize-16, SEEK_SET);
+	fread(officialHeader, 26, 1, rom);
+	hasOfficialHeader =
+		officialHeader[22] && officialHeader[22] < 3 &&
+	    officialHeader[23] && officialHeader[23] < 16;
+
+	if(!(hasOfficialHeader)) return;
+	memcpy(gameTitle, &officialHeader[15-officialHeader[23]], officialHeader[23]+1);
 }
 
 void readHWVectors(FILE *rom){
@@ -167,37 +211,59 @@ void countEmptySpace(FILE *rom){
 void printINesHeaderInfo(){
 	if(!isNes2){
 		printf("iNES header:\n");
-		for(int i=0;i<8;i++) printf(" %02x", header[i]);
+		for(int i=0;i<8;i++) printf(" %02x", iNesHeader[i]);
 	} else{
 		printf("NES 2.0 header:\n");
-		for(int i=0;i<16;i++) printf(" %02x", header[i]);
+		for(int i=0;i<16;i++) printf(" %02x", iNesHeader[i]);
 	}
 	
 	printf("\n\n PRG ROM size: %d KiB\n", prgSize*16);
 	printf(" CHR ROM size: %d KiB\n", chrSize*8);
 
 	printf(" Mapper: %d\n", mapper);
-	printf(" Battery-backed: %s\n", (header[6]&0x02) ? "yes" : "no");
-	printf(" Mirroring: %s\n", (header[6]&0x08) ? "none" : (header[6]&0x01) ? "vertical" : "horizontal");
+	printf(" Battery-backed: %s\n", (iNesHeader[6]&0x02) ? "yes" : "no");
+	printf(" Mirroring: %s\n", (iNesHeader[6]&0x08) ? "none" : (iNesHeader[6]&0x01) ? "vertical" : "horizontal");
 	printf(" Trainer: %s\n", hasTrainer ? "yes" : "no");
 
 	if(isNes2){
-		printf(" System: %s\n\n", (header[7]&0x3) == 3 ? systemNames[header[13]] : systemNames[header[7]&0x3]);
-		printf(" Submapper: %d\n", header[8]>>4);
-		printf(" PRG RAM size:   %d B\n", (header[10]&0x0f) ? 64 << (header[10]&0x0f) : 0);
-		printf(" PRG NVRAM size: %d B\n", (header[10]>>4) ? 64 << (header[10]>>4) : 0);
-		printf(" CHR RAM size:   %d B\n", (header[11]&0x0f) ? 64 << (header[11]&0x0f) : 0);
-		printf(" CHR NVRAM size: %d B\n\n", (header[11]>>4) ? 64 << (header[11]>>4) : 0);
+		printf(" System: %s\n\n", (iNesHeader[7]&0x3) == 3 ? systemNames[iNesHeader[13]] : systemNames[iNesHeader[7]&0x3]);
+		printf(" Submapper: %d\n", iNesHeader[8]>>4);
+		printf(" PRG RAM size:   %d B\n", (iNesHeader[10]&0x0f) ? 64 << (iNesHeader[10]&0x0f) : 0);
+		printf(" PRG NVRAM size: %d B\n", (iNesHeader[10]>>4) ? 64 << (iNesHeader[10]>>4) : 0);
+		printf(" CHR RAM size:   %d B\n", (iNesHeader[11]&0x0f) ? 64 << (iNesHeader[11]&0x0f) : 0);
+		printf(" CHR NVRAM size: %d B\n\n", (iNesHeader[11]>>4) ? 64 << (iNesHeader[11]>>4) : 0);
 
-		if((header[7]&0x3) == 1){
-			printf(" VS System Type: %s\n", vsSystemTypes[header[13]>>4]);
-			printf(" VS System PPU: %s\n", vsSystemPpuNames[header[13]&0x0f]);
+		if((iNesHeader[7]&0x3) == 1){
+			printf(" VS System Type: %s\n", vsSystemTypes[iNesHeader[13]>>4]);
+			printf(" VS System PPU: %s\n", vsSystemPpuNames[iNesHeader[13]&0x0f]);
 		}
 
-		printf(" Frame timing: %s\n", regionNames[header[12]]);
-		printf(" Misc ROMs: %d\n", header[14]);
-		printf(" Input Device: 0x%02x\n\n", header[15]);
-	} else printf(" System: %s\n\n", (header[7]&0x3) < 3 ? systemNames[header[7]&0x3] : "Other");
+		printf(" Frame timing: %s\n", regionNames[iNesHeader[12]]);
+		printf(" Misc ROMs: %d\n", iNesHeader[14]);
+		printf(" Input Device: 0x%02x\n\n", iNesHeader[15]);
+	} else printf(" System: %s\n\n", (iNesHeader[7]&0x3) < 3 ? systemNames[iNesHeader[7]&0x3] : "Other");
+}
+
+void printOfficialHeader(){
+	printf("Official header:\n");
+
+	if(!hasOfficialHeader){
+		printf(" This ROM does not appear to have an official header.\n\n");
+		return;
+	}
+
+	printf(" Title: %s\n", gameTitle);
+	printf(" Title encoding: %s\n", officialHeader[22] == 1 ? "ASCII" : officialHeader[22] == 2 ? "JIS X 0201" : "none");
+	printf(" Title length: %d B\n", officialHeader[23]+1);
+	printf(" Licensee code: 0x%02x\n", officialHeader[24]);
+	printf(" PRG ROM checksum: 0x%02x%02x\n", officialHeader[16], officialHeader[17]);
+	printf(" CHR ROM checksum: 0x%02x%02x\n", officialHeader[18], officialHeader[19]);
+	printf(" Complementary checksum: 0x%02x\n\n", officialHeader[24]);
+	printf(" PRG ROM size: %s KiB\n", officialPrgSizes[officialHeader[20]>>4]);
+	printf(" CHR size:     %s KiB\n", officialChrSizes[officialHeader[20]&0x07]);
+	printf(" CHR memory type: %s\n", (officialHeader[20]&0x08) ? "RAM" : "ROM");
+	printf(" Mirroring: %s\n", officialHeader[21]&0x80 ? "vertical" : "horizontal");
+	printf(" Mapper: %s\n\n", officialMapperNames[officialHeader[21]&0x07]);
 }
 
 int main(int argc, char *argv[]){
@@ -216,6 +282,10 @@ int main(int argc, char *argv[]){
 			
 			case 's':
 			opt = OPT_SPACE;
+			break;
+
+			case 'o':
+			opt = OPT_OFFICIAL;
 			break;
 			
 			case 'H':
@@ -243,8 +313,10 @@ int main(int argc, char *argv[]){
     }
 	
 	readINesHader(rom);
+	readOfficialHeader(rom);
 	
 	if(opt == OPT_INES || opt == OPT_ALL) printINesHeaderInfo();
+	if((opt == OPT_ALL && hasOfficialHeader) || opt == OPT_OFFICIAL) printOfficialHeader();
 	if(opt == OPT_VECTORS || opt == OPT_ALL){
 		readHWVectors(rom);
 		printf("Hardware vectors:\n");
