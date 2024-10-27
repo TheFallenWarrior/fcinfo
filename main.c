@@ -1,7 +1,7 @@
 /*
 	fcinfo
 	Copyright 2024 TheFallenWarrior
-	Lincensed under MIT/Expat
+	Licensed under MIT/Expat
 */
 
 #include <stdio.h>
@@ -200,7 +200,7 @@ void printUsage(){
 	);
 }
 
-void readINesHader(FILE *rom){
+void readINesHeader(FILE *rom){
 	fread(iNesHeader, 16, 1, rom);
 	if(memcmp(iNesHeader, "NES\x1a", 4)){
 		fprintf(stderr, "File provided isn't an NES rom.\n");
@@ -383,7 +383,7 @@ int main(int argc, char *argv[]){
         exit(1);
     }
 	
-	readINesHader(rom);
+	readINesHeader(rom);
 	readOfficialHeader(rom);
 	
 	if(opt == OPT_INES || opt == OPT_ALL) printINesHeaderInfo();
