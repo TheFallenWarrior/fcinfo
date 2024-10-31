@@ -288,8 +288,8 @@ void printINesHeaderInfo(){
 		for(int i=0;i<16;i++) printf(" %02x", iNesHeader[i]);
 	}
 	
-	printf("\n\n PRG ROM size: %d KiB\n", prgSize*16);
-	printf(" CHR ROM size: %d KiB\n", chrSize*8);
+	printf("\n\n PRG-ROM size: %d KiB\n", prgSize*16);
+	printf(" CHR-ROM size: %d KiB\n", chrSize*8);
 
 	printf(" Mapper: %d\n", mapper);
 	printf(" Battery-backed: %s\n", (iNesHeader[6]&0x02) ? "yes" : "no");
@@ -299,10 +299,10 @@ void printINesHeaderInfo(){
 	if(isNes2){
 		printf(" System: %s\n\n", (iNesHeader[7]&0x3) == 3 ? systemNames[iNesHeader[13]] : systemNames[iNesHeader[7]&0x3]);
 		printf(" Submapper: %d\n", iNesHeader[8]>>4);
-		printf(" PRG RAM size:   %d B\n", (iNesHeader[10]&0x0f) ? 64 << (iNesHeader[10]&0x0f) : 0);
-		printf(" PRG NVRAM size: %d B\n", (iNesHeader[10]>>4) ? 64 << (iNesHeader[10]>>4) : 0);
-		printf(" CHR RAM size:   %d B\n", (iNesHeader[11]&0x0f) ? 64 << (iNesHeader[11]&0x0f) : 0);
-		printf(" CHR NVRAM size: %d B\n\n", (iNesHeader[11]>>4) ? 64 << (iNesHeader[11]>>4) : 0);
+		printf(" PRG-RAM size:   %d B\n", (iNesHeader[10]&0x0f) ? 64 << (iNesHeader[10]&0x0f) : 0);
+		printf(" PRG-NVRAM size: %d B\n", (iNesHeader[10]>>4) ? 64 << (iNesHeader[10]>>4) : 0);
+		printf(" CHR-RAM size:   %d B\n", (iNesHeader[11]&0x0f) ? 64 << (iNesHeader[11]&0x0f) : 0);
+		printf(" CHR-NVRAM size: %d B\n\n", (iNesHeader[11]>>4) ? 64 << (iNesHeader[11]>>4) : 0);
 
 		if((iNesHeader[7]&0x3) == 1){
 			printf(" VS System Type: %s\n", vsSystemTypes[iNesHeader[13]>>4]);
@@ -327,10 +327,10 @@ void printOfficialHeader(){
 	printf(" Title encoding: %s\n", officialHeader[22] == 1 ? "ASCII" : officialHeader[22] == 2 ? "JIS X 0201" : "none");
 	printf(" Title length: %d B\n", officialHeader[23]+1);
 	printf(" Licensee code: 0x%02x\n", officialHeader[24]);
-	printf(" PRG ROM checksum: 0x%02x%02x\n", officialHeader[16], officialHeader[17]);
-	printf(" CHR ROM checksum: 0x%02x%02x\n", officialHeader[18], officialHeader[19]);
+	printf(" PRG-ROM checksum: 0x%02x%02x\n", officialHeader[16], officialHeader[17]);
+	printf(" CHR-ROM checksum: 0x%02x%02x\n", officialHeader[18], officialHeader[19]);
 	printf(" Complementary checksum: 0x%02x\n\n", officialHeader[24]);
-	printf(" PRG ROM size: %s KiB\n", officialPrgSizes[officialHeader[20]>>4]);
+	printf(" PRG-ROM size: %s KiB\n", officialPrgSizes[officialHeader[20]>>4]);
 	printf(" CHR size:     %s KiB\n", officialChrSizes[officialHeader[20]&0x07]);
 	printf(" CHR memory type: %s\n", (officialHeader[20]&0x08) ? "RAM" : "ROM");
 	printf(" Mirroring: %s\n", officialHeader[21]&0x80 ? "vertical" : "horizontal");
@@ -390,8 +390,8 @@ int main(int argc, char *argv[]){
 	if((opt == OPT_ALL && hasOfficialHeader) || opt == OPT_OFFICIAL) printOfficialHeader();
 	if(opt == OPT_VECTORS || opt == OPT_ALL){
 		readHWVectors(rom);
-		printf("Hardware vectors:\n");
-		printf(" NMI:          0x%04x\n", vectors[0]);
+		printf("Hardware vectors (CPU address):\n");
+		printf(" Vblank NMI:   0x%04x\n", vectors[0]);
 		printf(" Entry point:  0x%04x\n", vectors[1]);
 		printf(" External IRQ: 0x%04x\n\n", vectors[2]);
 	}
@@ -399,10 +399,10 @@ int main(int argc, char *argv[]){
 		countEmptySpace(rom);
 		printf("ROM space:\n");
 		for(int i=0;i<prgSize;i++)
-			printf(" Free space in PRG ROM bank %d: %d bytes\n", i, emptySpacePrg[i]);
+			printf(" Free space in PRG-ROM bank %d: %d bytes\n", i, emptySpacePrg[i]);
 		printf("\n");
 		for(int i=0;i<(chrSize*2);i++)
-			printf(" Free space in CHR ROM bank %d: %d tiles\n", i, 256-uniqueTileCounter[i]);
+			printf(" Free space in CHR-ROM page %d: %d tiles\n", i, 256-uniqueTileCounter[i]);
 		printf("\n");
 	}
     fclose(rom);
