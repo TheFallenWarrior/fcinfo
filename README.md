@@ -10,8 +10,8 @@ $ fcinfo -a game.nes
 NES 2.0 header:
  4e 45 53 1a 02 01 01 08 00 00 07 00 00 00 00 01
 
- PRG ROM size: 32 KiB
- CHR ROM size: 8 KiB
+ PRG-ROM size: 32 KiB
+ CHR-ROM size: 8 KiB
  Mapper: 0
  Battery-backed: no
  Mirroring: vertical
@@ -19,10 +19,10 @@ NES 2.0 header:
  System: NES/FC/Dendy
 
  Submapper: 0
- PRG RAM size:   8192 B
- PRG NVRAM size: 0 B
- CHR RAM size:   0 B
- CHR NVRAM size: 0 B
+ PRG-RAM size:   8192 B
+ PRG-NVRAM size: 0 B
+ CHR-RAM size:   0 B
+ CHR-NVRAM size: 0 B
 
  Frame timing: RP2C02 (NTSC)
  Misc ROMs: 0
@@ -32,26 +32,26 @@ Official header:
  Title: FCINFO TEST
  Title encoding: JIS X 0201
  Title length: 11 B
- Licensee code: 0xff
- PRG ROM checksum: 0x873a
- CHR ROM checksum: 0xc40d
- Complementary checksum: 0xff
+ Licensee code: 0x00
+ PRG-ROM checksum: 0x873a
+ CHR-ROM checksum: 0xc40d
+ Complementary checksum: 0xfe
 
- PRG ROM size: 32 KiB
+ PRG-ROM size: 32 KiB
  CHR size:     8 KiB
  CHR memory type: ROM
  Mirroring: vertical
  Mapper: NROM
 
-Hardware vectors:
- NMI:          0x8035
+Hardware vectors (CPU address):
+ Vblank NMI:   0x8035
  Entry point:  0x8000
  External IRQ: 0x805c
 
 ROM space:
- Free space in PRG ROM bank 0: 251 bytes
- Free space in PRG ROM bank 1: 14853 bytes
+ Free space in PRG-ROM bank 0: 251 bytes
+ Free space in PRG-ROM bank 1: 14853 bytes
 
- Free space in CHR ROM bank 0: 2 tiles
- Free space in CHR ROM bank 1: 26 tiles
+ Free space in CHR-ROM page 0: 2 tiles
+ Free space in CHR-ROM page 1: 26 tiles
 ```
