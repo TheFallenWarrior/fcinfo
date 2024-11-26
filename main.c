@@ -203,7 +203,7 @@ void printUsage(){
 void readINesHeader(FILE *rom){
 	fread(iNesHeader, 16, 1, rom);
 	if(memcmp(iNesHeader, "NES\x1a", 4)){
-		fprintf(stderr, "File provided isn't an NES rom.\n");
+		fprintf(stderr, "This file isn't an NES rom.\n");
 		exit(1);
 	}
 	isNes2 = iNesHeader[7]&0x08 && iNesHeader[7]&~0x04;
@@ -319,7 +319,7 @@ void printOfficialHeader(){
 	printf("Official header:\n");
 
 	if(!hasOfficialHeader){
-		printf(" This ROM does not appear to have an official header.\n\n");
+		printf(" This ROM does not appear to have an official header.\n");
 		return;
 	}
 
