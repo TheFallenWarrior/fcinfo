@@ -254,7 +254,7 @@ void countEmptySpace(FILE *rom){
 		}
 		if(tmp > emptySpacePrg[i]) emptySpacePrg[i] = tmp;
 	}
-	
+
 	// Count unique tiles in each bank in CHR-ROM
 	for(int i =0;i<(chrSize*2);i++){
 		memset(uniqueTilesBank, 0, 4096);
@@ -262,7 +262,7 @@ void countEmptySpace(FILE *rom){
 		for(int j=0;j<256;j++){
 			uint8_t tmp[16];
 			int uniqueTileFlag = 1;
-			
+
 			fread(tmp, 16, 1, rom);
 			for(int k=0;k<uniqueTileCounter[i];k++){
 				if(TILECMP(tmp, uniqueTilesBank[k])){
@@ -270,7 +270,7 @@ void countEmptySpace(FILE *rom){
 					break;
 				}
 			}
-			
+
 			if(uniqueTileFlag){
 				memcpy(uniqueTilesBank[uniqueTileCounter[i]], tmp, 16);
 				uniqueTileCounter[i]++;
@@ -287,7 +287,7 @@ void printINesHeaderInfo(){
 		printf("NES 2.0 header:\n");
 		for(int i=0;i<16;i++) printf(" %02x", iNesHeader[i]);
 	}
-	
+
 	printf("\n\n PRG-ROM size: %d KiB\n", prgSize*16);
 	printf(" CHR-ROM size: %d KiB\n", chrSize*8);
 
@@ -342,7 +342,7 @@ int main(int argc, char *argv[]){
 		printUsage();
 		exit(1);
 	}
-	
+
 	options opt = OPT_INES;
 	FILE *rom;
 	if(argv[1][0] == '-'){
@@ -350,7 +350,7 @@ int main(int argc, char *argv[]){
 			case 'V':
 			opt = OPT_VECTORS;
 			break;
-			
+
 			case 's':
 			opt = OPT_SPACE;
 			break;
@@ -358,19 +358,19 @@ int main(int argc, char *argv[]){
 			case 'o':
 			opt = OPT_OFFICIAL;
 			break;
-			
+
 			case 'H':
 			opt = OPT_INES;
 			break;
-			
+
 			case 'a':
 			opt = OPT_ALL;
 			break;
-			
+
 			case 'h':
 			printUsage();
 			exit(0);
-			
+
 			default:
 			printUsage();
 			exit(1);
@@ -382,10 +382,10 @@ int main(int argc, char *argv[]){
 		perror("Error opening rom.\n");
 		exit(1);
 	}
-	
+
 	readINesHeader(rom);
 	readOfficialHeader(rom);
-	
+
 	if(opt == OPT_INES || opt == OPT_ALL) printINesHeaderInfo();
 	if((opt == OPT_ALL && hasOfficialHeader) || opt == OPT_OFFICIAL) printOfficialHeader();
 	if(opt == OPT_VECTORS || opt == OPT_ALL){
