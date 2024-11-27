@@ -218,7 +218,7 @@ void readOfficialHeader(FILE *rom){
 	fread(officialHeader, 26, 1, rom);
 	hasOfficialHeader =
 		officialHeader[22] && officialHeader[22] < 3 &&
-	    officialHeader[23] && officialHeader[23] < 16;
+		officialHeader[23] && officialHeader[23] < 16;
 
 	if(!(hasOfficialHeader)) return;
 	memcpy(gameTitle, &officialHeader[15-officialHeader[23]], officialHeader[23]+1);
@@ -338,10 +338,10 @@ void printOfficialHeader(){
 }
 
 int main(int argc, char *argv[]){
-    if (argc < 2){
-        printUsage();
-        exit(1);
-    }
+	if (argc < 2){
+		printUsage();
+		exit(1);
+	}
 	
 	options opt = OPT_INES;
 	FILE *rom;
@@ -378,10 +378,10 @@ int main(int argc, char *argv[]){
 		rom = fopen(argv[2], "rb");
 	} else rom = fopen(argv[1], "rb");
 
-    if(rom == NULL){
-        perror("Error opening rom.\n");
-        exit(1);
-    }
+	if(rom == NULL){
+		perror("Error opening rom.\n");
+		exit(1);
+	}
 	
 	readINesHeader(rom);
 	readOfficialHeader(rom);
@@ -405,7 +405,7 @@ int main(int argc, char *argv[]){
 			printf(" Free space in CHR-ROM page %d: %d tiles\n", i, 256-uniqueTileCounter[i]);
 		printf("\n");
 	}
-    fclose(rom);
+	fclose(rom);
 
-    exit(0);
+	exit(0);
 }
