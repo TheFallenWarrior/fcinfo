@@ -231,14 +231,14 @@ void readHWVectors(FILE *rom){
 
 void countEmptySpace(FILE *rom){
 	if(prgSize > 255){
-		fprintf(stderr, "Warning: PRG ROM Size > 256 x 16 KiB is not supported.\n");
+		fprintf(stderr, "Warning: PRG-ROM Size > 256 x 16 KiB is not supported.\n");
 		prgSize = MIN(prgSize, 255);
 	}
 	if(chrSize > 255){
-		fprintf(stderr, "Warning: CHR ROM Size > 256 x 8 KiB is not supported.\n");
+		fprintf(stderr, "Warning: CHR-ROM Size > 256 x 8 KiB is not supported.\n");
 		chrSize = MIN(chrSize, 255);
 	}
-	// Count empty space in PRG ROM
+	// Count empty space in PRG-ROM
 	int ch;
 	fseek(rom, hasTrainer*512+16, SEEK_SET);
 	for(int i=0;i<prgSize;i++){
@@ -255,7 +255,7 @@ void countEmptySpace(FILE *rom){
 		if(tmp > emptySpacePrg[i]) emptySpacePrg[i] = tmp;
 	}
 	
-	// Count unique tiles in each bank in CHR ROM
+	// Count unique tiles in each bank in CHR-ROM
 	for(int i =0;i<(chrSize*2);i++){
 		memset(uniqueTilesBank, 0, 4096);
 		//uniqueTileCounter[i] = 1;
