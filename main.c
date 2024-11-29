@@ -190,7 +190,7 @@ typedef enum options{
 void printUsage(){
 	printf(
 		"Display information about a FC/NES ROM file\n"
-		"Usage: fcinfo [option] rom\n\n"
+		"Usage: fcinfo [option] ROM\n\n"
 		"'option' is one of:\n"
 		"\t-a\tShow all available information\n"
 		"\t-H\tDisplay iNES/NES 2.0 header information [default]\n"
@@ -379,7 +379,7 @@ int main(int argc, char *argv[]){
 	} else rom = fopen(argv[1], "rb");
 
 	if(rom == NULL){
-		perror("Error opening rom.\n");
+		perror("Error opening ROM.\n");
 		exit(1);
 	}
 
