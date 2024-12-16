@@ -43,10 +43,10 @@ Official header:
  Mirroring: vertical
  Mapper: NROM
 
-Hardware vectors (CPU address):
- Vblank NMI:   0x8035
- Entry point:  0x8000
- External IRQ: 0x805c
+Hardware vectors CPU address (ROM address):
+ Vblank NMI:   0x8035 (0x000045)
+ Entry point:  0x8000 (0x000010)
+ External IRQ: 0x805c (0x00006c)
 
 ROM space:
  Free space in PRG-ROM bank 0: 251 bytes
