@@ -190,12 +190,12 @@ typedef enum options{
 
 void printUsage(){
 	printf(
-		"Display information about a FC/NES ROM file\n"
+		"Display information about an FC/NES ROM file\n"
 		"Usage: fcinfo [option] ROM\n\n"
 		"'option' is one of:\n"
 		"\t-a\tShow all available information\n"
-		"\t-H\tDisplay iNES/NES 2.0 header information [default]\n"
-		"\t-o\tDisplay official header information (if present)\n"
+		"\t-H\tDisplay iNES/NES 2.0 header information (default)\n"
+		"\t-o\tDisplay official header information if present\n"
 		"\t-s\tDisplay free ROM space\n"
 		"\t-v\tDisplay hardware vectors\n\n"
 	);
