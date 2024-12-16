@@ -197,7 +197,7 @@ void printUsage(){
 		"\t-H\tDisplay iNES/NES 2.0 header information [default]\n"
 		"\t-o\tDisplay official header information (if present)\n"
 		"\t-s\tDisplay free ROM space\n"
-		"\t-V\tDisplay hardware vectors\n\n"
+		"\t-v\tDisplay hardware vectors\n\n"
 	);
 }
 
@@ -352,7 +352,7 @@ int main(int argc, char *argv[]){
 	FILE *rom;
 	if(argv[1][0] == '-'){
 		switch(argv[1][1]){
-			case 'V':
+			case 'v':
 			opt = OPT_VECTORS;
 			break;
 
