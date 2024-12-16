@@ -164,7 +164,8 @@ uint8_t iNesHeader[16];
 // https://www.nesdev.org/wiki/Nintendo_header
 uint8_t officialHeader[26];
 
-uint16_t vectors[3];
+uint16_t vectors[3]; // HW vector addresses in CPU memory
+int absVectors[3];   // HW vector addresses in ROM
 
 uint8_t uniqueTilesBank[256][16];
 int uniqueTileCounter[512];
@@ -227,6 +228,12 @@ void readOfficialHeader(FILE *rom){
 void readHWVectors(FILE *rom){
 	fseek(rom, hasTrainer*512+16*1024*prgSize+10, SEEK_SET);
 	fread(vectors, 2, 3, rom);
+
+	for(int i=0;i<3;i++){
+		absVectors[i] =
+			(vectors[i]-(32+16*(prgSize==1))*1024) +
+			(hasTrainer*512+16*1024*(prgSize-(prgSize!=1)-1)+16);
+	}
 }
 
 void countEmptySpace(FILE *rom){
@@ -388,10 +395,10 @@ int main(int argc, char *argv[]){
 	if((opt == OPT_ALL && hasOfficialHeader) || opt == OPT_OFFICIAL) printOfficialHeader();
 	if(opt == OPT_VECTORS || opt == OPT_ALL){
 		readHWVectors(rom);
-		printf("Hardware vectors (CPU address):\n");
-		printf(" Vblank NMI:   0x%04x\n", vectors[0]);
-		printf(" Entry point:  0x%04x\n", vectors[1]);
-		printf(" External IRQ: 0x%04x\n\n", vectors[2]);
+		printf("Hardware vectors CPU address (ROM address):\n");
+		printf(" Vblank NMI:   0x%04x (0x%06x)\n", vectors[0], absVectors[0]);
+		printf(" Entry point:  0x%04x (0x%06x)\n", vectors[1], absVectors[1]);
+		printf(" External IRQ: 0x%04x (0x%06x)\n\n", vectors[2], absVectors[2]);
 	}
 	if(opt == OPT_SPACE || opt == OPT_ALL){
 		countEmptySpace(rom);
