@@ -255,10 +255,9 @@ void countEmptySpace(FILE *rom){
 		if(tmp > emptySpacePrg[i]) emptySpacePrg[i] = tmp;
 	}
 
-	// Count unique tiles in each bank in CHR-ROM
+	// Count unique tiles in each 4 KiB page in CHR-ROM
 	for(int i =0;i<(chrSize*2);i++){
 		memset(uniqueTilesBank, 0, 4096);
-		//uniqueTileCounter[i] = 1;
 		for(int j=0;j<256;j++){
 			uint8_t tmp[16];
 			int uniqueTileFlag = 1;
