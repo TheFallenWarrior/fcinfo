@@ -231,11 +231,11 @@ void readHWVectors(FILE *rom){
 
 void countEmptySpace(FILE *rom){
 	if(prgSize > 255){
-		fprintf(stderr, "Warning: PRG-ROM Size > 256 x 16 KiB is not supported.\n");
+		fprintf(stderr, "Warning: PRG-ROM Size > 256 x 16 KiB is not supported.\n\n");
 		prgSize = 255;
 	}
 	if(chrSize > 255){
-		fprintf(stderr, "Warning: CHR-ROM Size > 256 x 8 KiB is not supported.\n");
+		fprintf(stderr, "Warning: CHR-ROM Size > 256 x 8 KiB is not supported.\n\n");
 		chrSize = 255;
 	}
 	// Count empty space in PRG-ROM
@@ -279,12 +279,11 @@ void countEmptySpace(FILE *rom){
 }
 
 void printINesHeaderInfo(){
-	if(!isNes2){
-		printf("iNES header:\n");
-		for(int i=0;i<8;i++) printf(" %02x", iNesHeader[i]);
-	} else{
-		printf("NES 2.0 header:\n");
-		for(int i=0;i<16;i++) printf(" %02x", iNesHeader[i]);
+	printf("%s header:\n", isNes2 ? "NES 2.0" : "iNES");
+	for(int i=0;i<8;i++) printf(" %02x", iNesHeader[i]);
+	printf(" ");
+	if(isNes2){
+		for(int i=8;i<16;i++) printf(" %02x", iNesHeader[i]);
 	}
 
 	printf("\n\n PRG-ROM size: %d KiB\n", prgSize*16);
@@ -318,7 +317,7 @@ void printOfficialHeader(){
 	printf("Official header:\n");
 
 	if(!hasOfficialHeader){
-		printf(" This ROM does not appear to have an official header.\n");
+		printf(" This ROM does not appear to have an official header.\n\n");
 		return;
 	}
 
