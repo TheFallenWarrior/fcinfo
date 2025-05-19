@@ -30,7 +30,7 @@ NES 2.0 header:
 
 Official header:
  Title: FCINFO TEST
- Title encoding: JIS X 0201
+ Title encoding: ASCII
  Title length: 11 B
  Licensee code: 0x00
  PRG-ROM checksum: 0x873a
