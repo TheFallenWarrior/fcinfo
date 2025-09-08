@@ -1,3 +1,9 @@
+/*
+	fcinfo
+	Copyright 2025 TheFallenWarrior
+	Licensed under MIT/Expat
+*/
+
 #ifndef FC_NAMES_H
 #define FC_NAMES_H
 

@@ -1,3 +1,9 @@
+/*
+	fcinfo
+	Copyright 2025 TheFallenWarrior
+	Licensed under MIT/Expat
+*/
+
 #include "names.h"
 
 const char *const systemNames[] = {
