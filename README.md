@@ -2,7 +2,7 @@
 
 fcinfo is a simple tool for analyzing ROM files for NES, Famicom, and related systems. It outputs various metadata from ROM, such as the iNES/NES 2.0 header, the official Nintendo header (used by the FamicomBox), hardware vectors, and free space in ROM.
 
-Free space is measured differently from [Shiru's NES Space Checker](https://forums.nesdev.org/viewtopic.php?t=8476), fcinfo looks for the largest block of null bytes in PRG ROM banks, and counts redundant tiles in CHR ROM banks.
+This program was written because I wasn't satisfied with the way [Shiru's NES Space Checker](https://forums.nesdev.org/viewtopic.php?t=8476) estimates and presents free space. fcinfo looks for the largest block of null bytes in PRG ROM banks, and counts redundant tiles in CHR ROM banks.
 
 ### Example output
 ```
