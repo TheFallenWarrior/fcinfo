@@ -384,7 +384,7 @@ int main(int argc, char *argv[]){
 	} else rom = fopen(argv[1], "rb");
 
 	if(rom == NULL){
-		perror("Error opening ROM.\n");
+		perror("Error opening ROM");
 		exit(1);
 	}
 
@@ -395,7 +395,7 @@ int main(int argc, char *argv[]){
 	if((opt == OPT_ALL && hasOfficialHeader) || opt == OPT_OFFICIAL) printOfficialHeader();
 	if(opt == OPT_VECTORS || opt == OPT_ALL){
 		readHWVectors(rom);
-		printf("Hardware vectors CPU address (ROM address):\n");
+		printf("Hardware vectors CPU address (ROM offset):\n");
 		printf(" Vblank NMI:   0x%04x (0x%06x)\n", vectors[0], absVectors[0]);
 		printf(" Entry point:  0x%04x (0x%06x)\n", vectors[1], absVectors[1]);
 		printf(" External IRQ: 0x%04x (0x%06x)\n\n", vectors[2], absVectors[2]);
