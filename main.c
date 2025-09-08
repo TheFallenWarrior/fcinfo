@@ -1,6 +1,6 @@
 /*
 	fcinfo
-	Copyright 2024 TheFallenWarrior
+	Copyright 2025 TheFallenWarrior
 	Licensed under MIT/Expat
 */
 
