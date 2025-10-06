@@ -43,7 +43,7 @@ Official header:
  Mirroring: vertical
  Mapper: NROM
 
-Hardware vectors CPU address (ROM address):
+Hardware vectors CPU address (ROM offset):
  Vblank NMI:   0x8035 (0x000045)
  Entry point:  0x8000 (0x000010)
  External IRQ: 0x805c (0x00006c)
