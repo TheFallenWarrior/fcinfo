@@ -12,7 +12,6 @@
 #include "names.h"
 
 #define TILECMP(x, y) (!memcmp((x), (y), 16))
-#define MIN(x, y) ((x) > (y) ? (y) : (x))
 
 // https://www.nesdev.org/wiki/INES
 // https://www.nesdev.org/wiki/NES_2.0
