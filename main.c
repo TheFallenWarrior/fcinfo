@@ -72,7 +72,7 @@ void readINesHeader(FILE *rom){
 }
 
 void readOfficialHeader(FILE *rom){
-	fseek(rom, hasTrainer*512+16*1024*prgSize-16, SEEK_SET);
+	fseek(rom, 16+hasTrainer*512+16*1024*prgSize-32, SEEK_SET);
 	fread(officialHeader, 26, 1, rom);
 	hasOfficialHeader =
 		officialHeader[22] && officialHeader[22] < 3 &&
@@ -83,7 +83,7 @@ void readOfficialHeader(FILE *rom){
 }
 
 void readHWVectors(FILE *rom){
-	fseek(rom, hasTrainer*512+16*1024*prgSize+10, SEEK_SET);
+	fseek(rom, 16+hasTrainer*512+16*1024*prgSize-6, SEEK_SET);
 	fread(vectors, 2, 3, rom);
 
 	for(int i=0;i<3;i++){
@@ -104,7 +104,7 @@ void countEmptySpace(FILE *rom){
 	}
 	// Count empty space in PRG-ROM
 	int ch;
-	fseek(rom, hasTrainer*512+16, SEEK_SET);
+	fseek(rom, 16+hasTrainer*512, SEEK_SET);
 	for(int i=0;i<prgSize;i++){
 		int tmp = 0;
 		emptySpacePrg[i] = 0;
