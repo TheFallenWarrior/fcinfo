@@ -87,8 +87,8 @@ void readHWVectors(FILE *rom){
 
 	for(int i=0;i<3;i++){
 		absVectors[i] =
-			(vectors[i]-(32+16*(prgSize==1))*1024) +
-			(16+hasTrainer*512+16*1024*(prgSize-(prgSize!=1)-1));
+			(vectors[i]-(32+16*(prgSize==1))*1024) +              // Subtract CPU memory base
+			(16+hasTrainer*512+16*1024*(prgSize-(prgSize!=1)-1)); // Add ROM file offset base
 	}
 }
 
