@@ -120,6 +120,7 @@ void countEmptySpace(FILE *rom){
 	}
 
 	// Count unique tiles in each 4 KiB page in CHR-ROM
+	fseek(rom, 16+hasTrainer*512+16*1024*prgSize, SEEK_SET);
 	for(int i =0;i<(chrSize*2);i++){
 		memset(uniqueTilesBank, 0, 4096);
 		for(int j=0;j<256;j++){
