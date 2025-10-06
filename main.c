@@ -95,11 +95,11 @@ void readHWVectors(FILE *rom){
 void countEmptySpace(FILE *rom){
 	if(prgSize > 255){
 		fprintf(stderr, "Warning: PRG-ROM Size > 256 x 16 KiB is not supported.\n\n");
-		prgSize = 255;
+		prgSize = 256;
 	}
 	if(chrSize > 255){
 		fprintf(stderr, "Warning: CHR-ROM Size > 256 x 8 KiB is not supported.\n\n");
-		chrSize = 255;
+		chrSize = 256;
 	}
 	// Count empty space in PRG-ROM
 	int ch;
