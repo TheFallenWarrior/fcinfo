@@ -23,7 +23,7 @@ uint8_t officialHeader[26];
 uint16_t vectors[3]; // HW vector addresses in CPU memory
 int absVectors[3];   // HW vector addresses in ROM
 
-uint8_t uniqueTilesBank[256][16];
+uint8_t uniqueTilesBuf[256][16];
 int uniqueTileCounter[512];
 int emptySpacePrg[256];
 
@@ -126,21 +126,21 @@ void countEmptySpace(FILE *rom){
 	// Estimate free space in each 4 KiB page in CHR-ROM by counting unique tiles
 	fseek(rom, 16+hasTrainer*512+16*1024*prgSize, SEEK_SET);
 	for(int i =0;i<(chrSize*2);i++){
-		memset(uniqueTilesBank, 0, 4096);
+		memset(uniqueTilesBuf, 0, 4096);
 		for(int j=0;j<256;j++){
 			uint8_t tmp[16];
 			int uniqueTileFlag = 1;
 
 			fread(tmp, 16, 1, rom);
 			for(int k=0;k<uniqueTileCounter[i];k++){
-				if(TILECMP(tmp, uniqueTilesBank[k])){
+				if(TILECMP(tmp, uniqueTilesBuf[k])){
 					uniqueTileFlag = 0;
 					break;
 				}
 			}
 
 			if(uniqueTileFlag){
-				memcpy(uniqueTilesBank[uniqueTileCounter[i]], tmp, 16);
+				memcpy(uniqueTilesBuf[uniqueTileCounter[i]], tmp, 16);
 				uniqueTileCounter[i]++;
 			}
 		}
