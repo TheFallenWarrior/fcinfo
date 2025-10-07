@@ -101,12 +101,12 @@ void countEmptySpace(FILE *rom){
 		fprintf(stderr, "Warning: CHR-ROM Size > 256 x 8 KiB is not supported.\n\n");
 		chrSize = 256;
 	}
-	// Count empty space in PRG-ROM
+	// Estimate empty space in PRG-ROM
 	int ch;
 	fseek(rom, 16+hasTrainer*512, SEEK_SET);
 	for(int i=0;i<prgSize;i++){
-		int cnt00 = 0;
-		int cntFF = 0;
+		int cnt00 = 0; // Current run of 0x00 bytes
+		int cntFF = 0; // Current run of 0xff bytes
 		emptySpacePrg[i] = 0;
 		for(int j=0; j<(16*1024) && (ch = fgetc(rom)) != EOF; j++){
 			if (!ch){
@@ -123,7 +123,7 @@ void countEmptySpace(FILE *rom){
 		else if(cntFF > emptySpacePrg[i]) emptySpacePrg[i] = cntFF;
 	}
 
-	// Count unique tiles in each 4 KiB page in CHR-ROM
+	// Estimate free space in each 4 KiB page in CHR-ROM by counting unique tiles
 	fseek(rom, 16+hasTrainer*512+16*1024*prgSize, SEEK_SET);
 	for(int i =0;i<(chrSize*2);i++){
 		memset(uniqueTilesBank, 0, 4096);
