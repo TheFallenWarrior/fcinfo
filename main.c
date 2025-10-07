@@ -105,17 +105,22 @@ void countEmptySpace(FILE *rom){
 	int ch;
 	fseek(rom, 16+hasTrainer*512, SEEK_SET);
 	for(int i=0;i<prgSize;i++){
-		int tmp = 0;
+		int cnt00 = 0;
+		int cntFF = 0;
 		emptySpacePrg[i] = 0;
 		for(int j=0; j<(16*1024) && (ch = fgetc(rom)) != EOF; j++){
 			if (!ch){
-				tmp++;
-			} else{
-				if(tmp > emptySpacePrg[i]) emptySpacePrg[i] = tmp;
-				tmp = 0;
+				cnt00++;
+			} else if(ch == 0xff){
+				cntFF++;
+			}else{
+				if     (cnt00 > emptySpacePrg[i]) emptySpacePrg[i] = cnt00;
+				else if(cntFF > emptySpacePrg[i]) emptySpacePrg[i] = cntFF;
+				cnt00 = cntFF = 0;
 			}
 		}
-		if(tmp > emptySpacePrg[i]) emptySpacePrg[i] = tmp;
+		if     (cnt00 > emptySpacePrg[i]) emptySpacePrg[i] = cnt00;
+		else if(cntFF > emptySpacePrg[i]) emptySpacePrg[i] = cntFF;
 	}
 
 	// Count unique tiles in each 4 KiB page in CHR-ROM
