@@ -131,7 +131,7 @@ void countEmptySpace(FILE *rom){
 			uint8_t tmp[16];
 			int uniqueTileFlag = 1;
 
-			fread(tmp, 16, 1, rom);
+			if(!fread(tmp, 16, 1, rom)) break;
 			for(int k=0;k<uniqueTileCounter[i];k++){
 				if(TILECMP(tmp, uniqueTilesBuf[k])){
 					uniqueTileFlag = 0;
