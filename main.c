@@ -196,7 +196,7 @@ void printOfficialHeader(){
 	printf(" Licensee code: 0x%02x\n", officialHeader[24]);
 	printf(" PRG-ROM checksum: 0x%02x%02x\n", officialHeader[16], officialHeader[17]);
 	printf(" CHR-ROM checksum: 0x%02x%02x\n", officialHeader[18], officialHeader[19]);
-	printf(" Complementary checksum: 0x%02x\n\n", officialHeader[24]);
+	printf(" Complementary checksum: 0x%02x\n\n", officialHeader[25]);
 	printf(" PRG-ROM size: %s KiB\n", officialPrgSizes[officialHeader[20]>>4]);
 	printf(" CHR size:     %s KiB\n", officialChrSizes[officialHeader[20]&0x07]);
 	printf(" CHR memory type: %s\n", (officialHeader[20]&0x08) ? "RAM" : "ROM");
