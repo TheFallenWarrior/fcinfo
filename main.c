@@ -27,8 +27,8 @@ uint8_t uniqueTilesBuf[256][16];
 int *uniqueTileCounter;
 int *emptySpacePrg;
 
-int prgSize;
-int chrSize;
+uint64_t prgSize;
+uint64_t chrSize;
 int mapper;
 int hasTrainer;
 int isNes2;
@@ -66,8 +66,36 @@ void readINesHeader(FILE *rom){
 	isNes2 = iNesHeader[7]&0x08 && iNesHeader[7]&~0x04;
 	mapper = (iNesHeader[6]>>4) | (iNesHeader[7]&0xf0) | (isNes2 ? (iNesHeader[8]&0xf)<<8 : 0);
 	hasTrainer = (iNesHeader[6]&0x04);
-	prgSize = iNesHeader[4] | (isNes2 ? iNesHeader[9]&0x0f : 0);
-	chrSize = iNesHeader[5] | (isNes2 ? iNesHeader[9]>>4 : 0);
+
+	if(!isNes2){
+		prgSize = iNesHeader[4];
+		chrSize = iNesHeader[5];
+		return;
+	}
+
+	uint8_t prgSizeExtra = iNesHeader[9]&0x0f;
+	uint8_t chrSizeExtra = iNesHeader[9]>>4;
+
+	if(prgSizeExtra != 0x0f)
+		prgSize = iNesHeader[4] | prgSizeExtra<<8;
+	else{
+		// Use exponent multiplier notation
+		int exponent = iNesHeader[4]>>2;
+		int multiplier = iNesHeader[4]&0x03;
+
+		// PRG size = 2^exponent * (multiplier * 2 + 1) bytes
+		// NOTE: The conversion to 16 KiB banks may not be exact
+		prgSize = (0x01<<exponent) * (multiplier*2 + 1) / (16*1024);
+	}
+
+	if(chrSizeExtra != 0x0f)
+		chrSize = iNesHeader[5] | chrSizeExtra<<8;
+	else{
+		int exponent = iNesHeader[5]>>2;
+		int multiplier = iNesHeader[5]&0x03;
+
+		chrSize = (0x01<<exponent) * (multiplier*2 + 1) / (8*1024);
+	}
 }
 
 void readOfficialHeader(FILE *rom){
@@ -153,8 +181,8 @@ void printINesHeaderInfo(){
 		for(int i=8;i<16;i++) printf(" %02x", iNesHeader[i]);
 	}
 
-	printf("\n\n PRG-ROM size: %d KiB\n", prgSize*16);
-	printf(" CHR-ROM size: %d KiB\n", chrSize*8);
+	printf("\n\n PRG-ROM size: %lu KiB\n", prgSize*16);
+	printf(" CHR-ROM size: %lu KiB\n", chrSize*8);
 
 	printf(" Mapper: %d\n", mapper);
 	printf(" Battery-backed: %s\n", (iNesHeader[6]&0x02) ? "yes" : "no");
