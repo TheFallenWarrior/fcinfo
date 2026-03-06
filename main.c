@@ -127,12 +127,14 @@ uint8_t countEmptySpace(FILE *rom){
 
 	// Estimate empty space in PRG-ROM
 	int ch;
+	int totalPrgBytes = 0;
 	fseek(rom, 16+hasTrainer*512, SEEK_SET);
 	for(int i=0;i<prgSize;i++){
 		int cnt00 = 0; // Current run of 0x00 bytes
 		int cntFF = 0; // Current run of 0xff bytes
 		emptySpacePrg[i] = 0;
 		for(int j=0; j<(16*1024) && (ch = fgetc(rom)) != EOF; j++){
+			totalPrgBytes++;
 			if (!ch){
 				cnt00++;
 			} else if(ch == 0xff){
@@ -146,8 +148,10 @@ uint8_t countEmptySpace(FILE *rom){
 		if     (cnt00 > emptySpacePrg[i]) emptySpacePrg[i] = cnt00;
 		else if(cntFF > emptySpacePrg[i]) emptySpacePrg[i] = cntFF;
 	}
+	if(totalPrgBytes < (int)(prgSize * 16*1024)) return 1;
 
 	// Estimate free space in each 4 KiB page in CHR-ROM by counting unique tiles
+	int totalChrTiles = 0;
 	fseek(rom, 16+hasTrainer*512+16*1024*prgSize, SEEK_SET);
 	for(int i =0;i<(chrSize*2);i++){
 		memset(uniqueTilesBuf, 0, 4096);
@@ -156,6 +160,7 @@ uint8_t countEmptySpace(FILE *rom){
 			int uniqueTileFlag = 1;
 
 			if(!fread(tmp, 16, 1, rom)) break;
+			totalChrTiles++;
 			for(int k=0;k<uniqueTileCounter[i];k++){
 				if(TILECMP(tmp, uniqueTilesBuf[k])){
 					uniqueTileFlag = 0;
@@ -169,6 +174,7 @@ uint8_t countEmptySpace(FILE *rom){
 			}
 		}
 	}
+	if(totalChrTiles < (int)(chrSize * 2*256)) return 1;
 
 	return 0;
 }
@@ -298,7 +304,7 @@ int main(int argc, char *argv[]){
 				printf(" Free space in CHR-ROM page %d: %d tiles\n", i, 256-uniqueTileCounter[i]);
 			printf("\n");
 		} else{
-			printf(" Free space analysis failed.\n");
+			printf(" Free space analysis failed: memory error or malformed ROM.\n");
 		}
 	}
 	fclose(rom);
