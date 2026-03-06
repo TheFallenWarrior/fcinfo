@@ -289,8 +289,8 @@ int main(int argc, char *argv[]){
 		printf(" External IRQ: 0x%04x (0x%06x)\n\n", vectors[2], absVectors[2]);
 	}
 	if(opt == OPT_SPACE || opt == OPT_ALL){
+		printf("ROM space:\n");
 		if(!countEmptySpace(rom)){
-			printf("ROM space:\n");
 			for(int i=0;i<prgSize;i++)
 				printf(" Free space in PRG-ROM bank %d: %d bytes\n", i, emptySpacePrg[i]);
 			printf("\n");
@@ -298,7 +298,7 @@ int main(int argc, char *argv[]){
 				printf(" Free space in CHR-ROM page %d: %d tiles\n", i, 256-uniqueTileCounter[i]);
 			printf("\n");
 		} else{
-			printf("Error: Space analysis failed.");
+			printf(" Free space analysis failed.\n");
 		}
 	}
 	fclose(rom);
