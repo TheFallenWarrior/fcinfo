@@ -24,8 +24,8 @@ uint16_t vectors[3]; // HW vector addresses in CPU memory
 int absVectors[3];   // HW vector addresses in ROM
 
 uint8_t uniqueTilesBuf[256][16];
-int uniqueTileCounter[512];
-int emptySpacePrg[256];
+int *uniqueTileCounter;
+int *emptySpacePrg;
 
 int prgSize;
 int chrSize;
@@ -92,15 +92,11 @@ void readHwVectors(FILE *rom){
 	}
 }
 
-void countEmptySpace(FILE *rom){
-	if(prgSize > 256){
-		fprintf(stderr, "Warning: PRG-ROM Size > 256 x 16 KiB will be truncated.\n\n");
-		prgSize = 256;
-	}
-	if(chrSize > 256){
-		fprintf(stderr, "Warning: CHR-ROM Size > 256 x 8 KiB will be truncated.\n\n");
-		chrSize = 256;
-	}
+uint8_t countEmptySpace(FILE *rom){
+	emptySpacePrg = malloc(prgSize*sizeof(int));
+	uniqueTileCounter = malloc(2*chrSize*sizeof(int));
+	if(!emptySpacePrg || !uniqueTileCounter) return 1;
+
 	// Estimate empty space in PRG-ROM
 	int ch;
 	fseek(rom, 16+hasTrainer*512, SEEK_SET);
@@ -145,6 +141,8 @@ void countEmptySpace(FILE *rom){
 			}
 		}
 	}
+
+	return 0;
 }
 
 void printINesHeaderInfo(){
@@ -263,14 +261,17 @@ int main(int argc, char *argv[]){
 		printf(" External IRQ: 0x%04x (0x%06x)\n\n", vectors[2], absVectors[2]);
 	}
 	if(opt == OPT_SPACE || opt == OPT_ALL){
-		countEmptySpace(rom);
-		printf("ROM space:\n");
-		for(int i=0;i<prgSize;i++)
-			printf(" Free space in PRG-ROM bank %d: %d bytes\n", i, emptySpacePrg[i]);
-		printf("\n");
-		for(int i=0;i<(chrSize*2);i++)
-			printf(" Free space in CHR-ROM page %d: %d tiles\n", i, 256-uniqueTileCounter[i]);
-		printf("\n");
+		if(!countEmptySpace(rom)){
+			printf("ROM space:\n");
+			for(int i=0;i<prgSize;i++)
+				printf(" Free space in PRG-ROM bank %d: %d bytes\n", i, emptySpacePrg[i]);
+			printf("\n");
+			for(int i=0;i<(chrSize*2);i++)
+				printf(" Free space in CHR-ROM page %d: %d tiles\n", i, 256-uniqueTileCounter[i]);
+			printf("\n");
+		} else{
+			printf("Error: Space analysis failed.");
+		}
 	}
 	fclose(rom);
 
