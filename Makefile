@@ -4,7 +4,7 @@
 # Compiler and flags
 CC = gcc
 CFLAGS  = -Wall -Wextra -Ofast
-LDFLAGS = -lm
+LDFLAGS =
 
 # Project name and directories
 TARGET  = fcinfo
