@@ -39,3 +39,6 @@ $(OBJ_DIR):
 
 cppcheck:
 	cppcheck -q -x c --enable=all --suppress=missingIncludeSystem $(SRC_DIR)
+
+clean:
+	rm -rf $(BIN_DIR) $(OBJ_DIR)
