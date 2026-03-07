@@ -124,7 +124,6 @@ uint8_t countEmptySpace(FILE *rom){
 	emptySpacePrg = malloc(prgSize*sizeof(int));
 	uniqueTileCounter = malloc(2*chrSize*sizeof(int));
 	if(!emptySpacePrg || !uniqueTileCounter) return 1;
-	for(int i=0;i<2*chrSize;i++) uniqueTileCounter = 0;
 
 	// Estimate empty space in PRG-ROM
 	int ch;
@@ -156,6 +155,7 @@ uint8_t countEmptySpace(FILE *rom){
 	fseek(rom, 16+hasTrainer*512+16*1024*prgSize, SEEK_SET);
 	for(int i =0;i<(chrSize*2);i++){
 		memset(uniqueTilesBuf, 0, 4096);
+		uniqueTileCounter[i] = 0;
 		for(int j=0;j<256;j++){
 			uint8_t tmp[16];
 			int uniqueTileFlag = 1;
