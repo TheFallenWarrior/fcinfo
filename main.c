@@ -27,8 +27,8 @@ uint8_t uniqueTilesBuf[256][16];
 int *uniqueTileCounter;
 int *emptySpacePrg;
 
-uint64_t prgSize;
-uint64_t chrSize;
+int64_t prgSize;
+int64_t chrSize;
 int mapper;
 int hasTrainer;
 int isNes2;
@@ -187,8 +187,8 @@ void printINesHeaderInfo(){
 		for(int i=8;i<16;i++) printf(" %02x", iNesHeader[i]);
 	}
 
-	printf("\n\n PRG-ROM size: %lu KiB\n", prgSize*16);
-	printf(" CHR-ROM size: %lu KiB\n", chrSize*8);
+	printf("\n\n PRG-ROM size: %ld KiB\n", prgSize*16);
+	printf(" CHR-ROM size: %ld KiB\n", chrSize*8);
 
 	printf(" Mapper: %d\n", mapper);
 	printf(" Battery-backed: %s\n", (iNesHeader[6]&0x02) ? "yes" : "no");
