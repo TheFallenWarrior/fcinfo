@@ -85,7 +85,7 @@ void readINesHeader(FILE *rom){
 
 		// PRG size = 2^exponent * (multiplier * 2 + 1) bytes
 		// NOTE: The conversion to 16 KiB banks may not be exact
-		prgSize = (0x01<<exponent) * (multiplier*2 + 1) / (16*1024);
+		prgSize = ((int64_t)0x01<<exponent) * (multiplier*2 + 1) / (16*1024);
 	}
 
 	if(chrSizeExtra != 0x0f)
@@ -94,7 +94,7 @@ void readINesHeader(FILE *rom){
 		int exponent = iNesHeader[5]>>2;
 		int multiplier = iNesHeader[5]&0x03;
 
-		chrSize = (0x01<<exponent) * (multiplier*2 + 1) / (8*1024);
+		chrSize = ((int64_t)0x01<<exponent) * (multiplier*2 + 1) / (8*1024);
 	}
 }
 
