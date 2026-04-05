@@ -308,6 +308,8 @@ int main(int argc, char *argv[]){
 			printf(" Free space analysis failed: memory error or malformed ROM.\n");
 		}
 	}
+	free(emptySpacePrg);
+	free(uniqueTileCounter);
 	fclose(rom);
 
 	exit(0);
