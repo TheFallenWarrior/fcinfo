@@ -17,7 +17,7 @@ SOURCES = $(wildcard $(SRC_DIR)/*.c)
 OBJECTS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
 
 # Phony targets
-.PHONY: all clean
+.PHONY: all clean cppcheck
 
 # Default target
 all: $(BIN_DIR)/$(TARGET)
