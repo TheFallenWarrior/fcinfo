@@ -3,7 +3,7 @@
 
 # Compiler and flags
 CC = gcc
-CFLAGS  = -Wall -Wextra -Ofast
+CFLAGS  = -Wall -Wextra -Ofast -MMD -MP
 LDFLAGS =
 
 # Project name and directories
@@ -15,6 +15,7 @@ BIN_DIR = bin
 # Source and object files
 SOURCES = $(wildcard $(SRC_DIR)/*.c)
 OBJECTS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
+DEPS    = $(OBJECTS:.o=.d)
 
 # Phony targets
 .PHONY: all clean cppcheck
@@ -29,6 +30,9 @@ $(BIN_DIR)/$(TARGET): $(OBJECTS) | $(BIN_DIR)
 # Compile source files to object files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
+
+# Pull in auto-generated dependency files
+-include $(DEPS)
 
 # Create directories if they don't exist
 $(BIN_DIR):
