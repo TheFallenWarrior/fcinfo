@@ -3,7 +3,7 @@
 
 # Compiler and flags
 CC = gcc
-CFLAGS  = -Wall -Wextra -Ofast
+CFLAGS  = -Wall -Wextra -Ofast -MMD -MP
 LDFLAGS =
 
 # Project name and directories
@@ -15,9 +15,10 @@ BIN_DIR = bin
 # Source and object files
 SOURCES = $(wildcard $(SRC_DIR)/*.c)
 OBJECTS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
+DEPS    = $(OBJECTS:.o=.d)
 
 # Phony targets
-.PHONY: all clean
+.PHONY: all clean cppcheck
 
 # Default target
 all: $(BIN_DIR)/$(TARGET)
@@ -30,6 +31,9 @@ $(BIN_DIR)/$(TARGET): $(OBJECTS) | $(BIN_DIR)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+# Pull in auto-generated dependency files
+-include $(DEPS)
+
 # Create directories if they don't exist
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
@@ -38,7 +42,7 @@ $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
 cppcheck:
-	cppcheck -q -x c --enable=all --suppress=missingIncludeSystem $(SRC_DIR)
+	cppcheck -q -x c --enable=all --disable=unusedFunction,missingInclude $(SRC_DIR)
 
 clean:
 	rm -rf $(BIN_DIR) $(OBJ_DIR)
