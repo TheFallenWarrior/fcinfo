@@ -1,5 +1,6 @@
 
 #include <stdint.h>
+#include <stdio.h>
 
 #include "base.h"
 
@@ -30,4 +31,13 @@ char gameTitle[16];
 uint32_t getLastBankOffset(uint16_t addr){
 	return (addr-(32+16*(prgSize==1))*1024) +              // Subtract CPU memory base
 	(16+hasTrainer*512+16*1024*(prgSize-(prgSize!=1)-1));  // Add ROM file offset base
+}
+
+int16_t readMemory(FILE* fp, uint16_t addr){
+	uint32_t offset = getLastBankOffset(addr);
+
+	fseek(fp, offset, SEEK_SET);
+
+	// May return EOF
+	return fgetc(fp);
 }

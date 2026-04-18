@@ -2,6 +2,7 @@
 #define FC_MAPPER_H
 
 #include <stdint.h>
+#include <stdio.h>
 
 extern uint8_t iNesHeader[16];
 extern uint8_t officialHeader[26];
@@ -19,5 +20,6 @@ extern int hasOfficialHeader;
 extern char gameTitle[16];
 
 uint32_t getLastBankOffset(uint16_t addr);
+int16_t readMemory(FILE* fp, uint16_t addr);
 
 #endif
