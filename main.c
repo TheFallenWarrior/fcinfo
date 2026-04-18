@@ -10,6 +10,8 @@
 #include <string.h>
 
 #include "base.h"
+#include "disasm.h"
+#include "instructions.h"
 #include "names.h"
 
 #define TILECMP(x, y) (!memcmp((x), (y), 16))
@@ -19,6 +21,7 @@ typedef enum options{
 	OPT_SPACE,
 	OPT_OFFICIAL,
 	OPT_INES,
+	OPT_DISASS,
 	OPT_ALL,
 } options;
 
@@ -27,7 +30,8 @@ void printUsage(){
 		"Display information about an FC/NES ROM file\n"
 		"Usage: fcinfo [option] ROM\n\n"
 		"'option' is one of:\n"
-		"\t-a\tShow all available information\n"
+		"\t-a\tShow all available information (sans disassembly)\n"
+		"\t-d\tDisassemble interrupt handlers (until first RTI/JMP) to stdout\n"
 		"\t-H\tDisplay iNES/NES 2.0 header information (default)\n"
 		"\t-o\tDisplay official header information if present\n"
 		"\t-s\tDisplay free ROM space\n"
@@ -213,6 +217,19 @@ void printOfficialHeader(){
 	printf(" Mapper: %s\n\n", officialMapperNames[officialHeader[21]&0x07]);
 }
 
+void disassembleSub(FILE *rom, uint16_t addr){
+	Opcode op;
+	int16_t nextAddr;
+	char str[128];
+	do{
+		op = opcodes[readMemory(rom, addr)];
+		nextAddr = disassemble(rom, addr, str, 128);
+		printf(" %s\n", str);
+		addr = nextAddr;
+	// We shouldn't see RTS in an interrupt handler, but guard against it anyway
+	} while(op.instr != INS_JMP && op.instr != INS_RTI && op.instr != INS_RTS);
+}
+
 int main(int argc, char *argv[]){
 	if (argc < 2){
 		printUsage();
@@ -237,6 +254,10 @@ int main(int argc, char *argv[]){
 
 			case 'H':
 			opt = OPT_INES;
+			break;
+
+			case 'd':
+			opt = OPT_DISASS;
 			break;
 
 			case 'a':
@@ -284,9 +305,20 @@ int main(int argc, char *argv[]){
 			printf(" Free space analysis failed: memory error or malformed ROM.\n");
 		}
 	}
+	if(opt == OPT_DISASS){
+		readHwVectors(rom);
+		printf("; Dissassembled by fcinfo\n");
+		printf("; Not guaranteed to be valid 6502 assembly; for reference only\n");
+		printf("nmi:\n");
+		disassembleSub(rom, vectors[0]);
+		printf("\nreset:\n");
+		disassembleSub(rom, vectors[1]);
+		printf("\nirq:\n");
+		disassembleSub(rom, vectors[2]);
+	}
+
 	free(emptySpacePrg);
 	free(uniqueTileCounter);
 	fclose(rom);
-
 	exit(0);
 }
