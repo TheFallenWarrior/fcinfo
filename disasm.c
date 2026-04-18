@@ -16,28 +16,29 @@
 // Return address of the next instruction
 uint16_t disassemble(FILE *fp, uint16_t addr, char *out, uint16_t n){
 	Opcode   op;
-	uint8_t  param8  = 0;
+	uint8_t  ins, param8  = 0;
 	uint16_t param16 = 0;
 	uint16_t nextAddr;
 	char pbuf[10]; // Instruction parameters
 	char bbuf[11]; // Instruction hex dump
 
-	op = opcodes[readMemory(fp, addr)];
+	ins = readMemory(fp, addr);
+	op = opcodes[ins];
 	nextAddr = addr + instruction_length[op.addr_mode];
 
 	switch(instruction_length[op.addr_mode]){
 		case 1:
-		snprintf(bbuf, 11, "; %02X", op.instr);
+		snprintf(bbuf, 11, "; %02X", ins);
 		break;
 
 		case 2:
 		param8  = readMemory(fp, 1 + addr);
-		snprintf(bbuf, 11, "; %02X %02X", op.instr, param8);
+		snprintf(bbuf, 11, "; %02X %02X", ins, param8);
 		break;
 		
 		case 3:
 		param16 = readMemory(fp, 1 + addr) | readMemory(fp, 2 + addr) << 8;
-		snprintf(bbuf, 11, "; %02X %02X %02X", op.instr, param16&0xff, param16>>8);
+		snprintf(bbuf, 11, "; %02X %02X %02X", ins, param16&0xff, param16>>8);
 		break;
 
 		default:;
