@@ -85,17 +85,6 @@ typedef struct{
 	uint8_t addr_mode;
 } Opcode;
 
-typedef struct{
-	Opcode operation;
-	
-	// Instruction parameters
-	int8_t param8;
-	int16_t param16;
-
-	// Whether the instruction modifies PC directly 
-	int8_t pc_mod;
-} DecodedInstruction;
-
 extern const uint8_t instruction_length[];
 extern const Opcode opcodes[];
 extern const char *const mnemonics[];
