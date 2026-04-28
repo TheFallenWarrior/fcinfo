@@ -222,7 +222,7 @@ void disassembleSub(FILE *rom, uint16_t addr){
 	int16_t nextAddr;
 	char str[128];
 	do{
-		op = opcodes[readMemory(rom, addr)];
+		op = opcodes[(uint8_t)readMemory(rom, addr)];
 		nextAddr = disassemble(rom, addr, str, 128);
 		printf(" %s\n", str);
 		addr = nextAddr;

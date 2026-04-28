@@ -22,7 +22,7 @@ uint16_t disassemble(FILE *fp, uint16_t addr, char *out, uint16_t n){
 	char pbuf[10]; // Instruction parameters
 	char bbuf[11]; // Instruction hex dump
 
-	ins = readMemory(fp, addr);
+	ins = (uint8_t)readMemory(fp, addr);
 	op = opcodes[ins];
 	nextAddr = addr + instruction_length[op.addr_mode];
 
@@ -32,12 +32,12 @@ uint16_t disassemble(FILE *fp, uint16_t addr, char *out, uint16_t n){
 		break;
 
 		case 2:
-		param8  = readMemory(fp, 1 + addr);
+		param8  = (uint8_t)readMemory(fp, 1 + addr);
 		snprintf(bbuf, 11, "; %02X %02X", ins, param8);
 		break;
 		
 		case 3:
-		param16 = readMemory(fp, 1 + addr) | readMemory(fp, 2 + addr) << 8;
+		param16 = (uint8_t)readMemory(fp, 1 + addr) | (uint8_t)readMemory(fp, 2 + addr) << 8;
 		snprintf(bbuf, 11, "; %02X %02X %02X", ins, param16&0xff, param16>>8);
 		break;
 
