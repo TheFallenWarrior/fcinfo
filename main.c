@@ -219,7 +219,7 @@ void printOfficialHeader(){
 
 void disassembleSub(FILE *rom, uint16_t addr){
 	Opcode op;
-	int16_t nextAddr;
+	uint16_t nextAddr;
 	char str[128];
 	do{
 		op = opcodes[(uint8_t)readMemory(rom, addr)];
