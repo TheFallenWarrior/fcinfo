@@ -27,7 +27,7 @@ int isNes2;
 int hasOfficialHeader;
 char gameTitle[16];
 
-// Return the file offset of the given CPU address, mapped to the two last PRG banks
+// Return the file offset of the given CPU address, mapped to the last PRG bank
 // This uses a heuristic that assumes the full PRG is visible for NROM (16 or 32 KiB) ROMs,
 //  or that the last bank is fixed at 0xC000-0xFFFF (MMC style).
 int64_t getLastBankOffset(uint16_t addr) {
