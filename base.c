@@ -30,14 +30,14 @@ char gameTitle[16];
 // Return the file offset of the given CPU address, mapped to the last PRG bank
 // This uses a heuristic that assumes the full PRG is visible for NROM (16 or 32 KiB) ROMs,
 //  or that the last bank is fixed at 0xC000-0xFFFF (MMC style).
-int64_t getLastBankOffset(uint16_t addr) {
+int64_t getLastBankOffset(uint16_t addr){
 	int64_t bank = (
 		(prgSize >= 2 && !(addr&0x4000)) ?
 		prgSize - 2 :   // 0x8000-0xBFFF: second-to-last bank (NROM-256)
 		prgSize - 1     // 0xC000-0xFFFF: last bank (or only bank)
 	);
-	int64_t bankStart = 16 + hasTrainer*512 + bank*16384;
-	int64_t offsetInBank = addr&0x3FFF;
+	int64_t bankStart = 16 + hasTrainer*512 + bank*16*1024;
+	int64_t offsetInBank = addr&0x3fff;
 	return bankStart + offsetInBank;
 }
 

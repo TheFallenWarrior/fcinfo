@@ -119,7 +119,7 @@ uint8_t countEmptySpace(FILE *rom){
 				cnt00++;
 			} else if(ch == 0xff){
 				cntFF++;
-			}else{
+			} else{
 				if     (cnt00 > emptySpacePrg[i]) emptySpacePrg[i] = cnt00;
 				else if(cntFF > emptySpacePrg[i]) emptySpacePrg[i] = cntFF;
 				cnt00 = cntFF = 0;
@@ -133,7 +133,7 @@ uint8_t countEmptySpace(FILE *rom){
 	// Estimate free space in each 4 KiB page in CHR-ROM by counting unique tiles
 	int64_t totalChrTiles = 0;
 	fseek(rom, 16+hasTrainer*512+16*1024*prgSize, SEEK_SET);
-	for(int i =0;i<(chrSize*2);i++){
+	for(int i=0;i<(chrSize*2);i++){
 		memset(uniqueTilesBuf, 0, 4096);
 		uniqueTileCounter[i] = 0;
 		for(int j=0;j<256;j++){
