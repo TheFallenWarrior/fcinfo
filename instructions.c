@@ -1,3 +1,9 @@
+/*
+	fcinfo
+	Copyright 2026 TheFallenWarrior
+	Licensed under MIT/Expat
+*/
+
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
