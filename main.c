@@ -215,7 +215,7 @@ void printOfficialHeader(){
 	printf(" PRG-ROM size: %s KiB\n", officialPrgSizes[officialHeader[20]>>4]);
 	printf(" CHR size:     %s KiB\n", officialChrSizes[officialHeader[20]&0x07]);
 	printf(" CHR memory type: %s\n", (officialHeader[20]&0x08) ? "RAM" : "ROM");
-	printf(" Mirroring: %s\n", officialHeader[21]&0x80 ? "vertical" : "horizontal");
+	printf(" Mirroring: %s\n", (officialHeader[21]&0x80) ? "vertical" : "horizontal");
 	printf(" Mapper: %s\n\n", officialMapperNames[officialHeader[21]&0x07]);
 }
 
