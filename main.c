@@ -117,16 +117,18 @@ uint8_t countEmptySpace(FILE *rom){
 			totalPrgBytes++;
 			if (!ch){
 				cnt00++;
+				cntFF = 0;
 			} else if(ch == 0xff){
 				cntFF++;
+				cnt00 = 0;
 			} else{
-				if     (cnt00 > emptySpacePrg[i]) emptySpacePrg[i] = cnt00;
-				else if(cntFF > emptySpacePrg[i]) emptySpacePrg[i] = cntFF;
+				if(cnt00 > emptySpacePrg[i]) emptySpacePrg[i] = cnt00;
+				if(cntFF > emptySpacePrg[i]) emptySpacePrg[i] = cntFF;
 				cnt00 = cntFF = 0;
 			}
 		}
-		if     (cnt00 > emptySpacePrg[i]) emptySpacePrg[i] = cnt00;
-		else if(cntFF > emptySpacePrg[i]) emptySpacePrg[i] = cntFF;
+		if(cnt00 > emptySpacePrg[i]) emptySpacePrg[i] = cnt00;
+		if(cntFF > emptySpacePrg[i]) emptySpacePrg[i] = cntFF;
 	}
 	if(totalPrgBytes < (prgSize * 16*1024)) return 1;
 
