@@ -47,7 +47,7 @@ void readINesHeader(FILE *rom){
 	}
 	isNes2 = ((iNesHeader[7]&0x0c) == 0x08);
 	mapper = (iNesHeader[6]>>4) | (iNesHeader[7]&0xf0) | (isNes2 ? (iNesHeader[8]&0xf)<<8 : 0);
-	hasTrainer = (iNesHeader[6]&0x04);
+	hasTrainer = !!(iNesHeader[6]&0x04);
 
 	if(!isNes2){
 		prgSize = iNesHeader[4];
