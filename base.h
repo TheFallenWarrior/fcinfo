@@ -1,5 +1,5 @@
-#ifndef FC_MAPPER_H
-#define FC_MAPPER_H
+#ifndef FC_BASE_H
+#define FC_BASE_H
 
 #include <stdint.h>
 #include <stdio.h>
