@@ -133,6 +133,7 @@ const Opcode opcodes[] = {
 	{INS_NOP, AM_INDEXED_ZEROPAGE_X},            // 0x14
 	{INS_ORA, AM_INDEXED_ZEROPAGE_X}, // 0x15
 	{INS_ASL, AM_INDEXED_ZEROPAGE_X}, // 0x16
+	{INS_SLO, AM_INDEXED_ZEROPAGE_X}, // 0x17
 	{INS_CLC, AM_IMPLIED},            // 0x18
 	{INS_ORA, AM_INDEXED_ABSOLUTE_Y}, // 0x19
 	{INS_NOP, AM_IMPLIED},            // 0x1A
