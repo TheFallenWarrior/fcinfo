@@ -2,9 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "base.h"
 #include "instructions.h"
-#include "memory.h"
 
 const char *const mnemonics[] = {
 	"INV",

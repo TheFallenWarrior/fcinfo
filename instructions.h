@@ -2,7 +2,6 @@
 #define FC_INSTRUCTIONS_H
 
 #include <stdint.h>
-#include <stdio.h>
 
 enum _addressing_modes{
 	AM_ACCUMULATOR,
