@@ -20,7 +20,9 @@ enum _addressing_modes{
 };
 
 enum _instructions{
-	INS_INV, // Invalid		
+	INS_JAM, // Crash CPU
+
+	// Documented instuctions
 	INS_ADC,
 	INS_AND,
 	INS_ASL,
@@ -76,7 +78,28 @@ enum _instructions{
 	INS_TSX,
 	INS_TXA,
 	INS_TXS,
-	INS_TYA
+	INS_TYA,
+
+	// Illegal instructions
+	INS_ANE, // OR A with unstable, AND X with immediate
+	INS_ANC, // AND A with immediate, copy N into C
+	INS_ARR, // AND A with immediate, rotate result right
+	INS_ASR, // AND A with immediate, shift result right
+	INS_DCP, // Decrement and compare result
+	INS_ISC, // Increment memory, SBC from A
+	INS_LAS, // AND S with memory, store result into A, X, and S
+	INS_LAX, // Load A and X with memory
+	INS_LXA, // OR A with unstable, AND A with immediate, store result into A and X
+	INS_RLA, // Rotate left, AND result with A
+	INS_RRA, // Rotate right and add with carry
+	INS_SAX, // AND A with X, store result into memory
+	INS_SBX, // AND A with X, SBC immediate
+	INS_SHA, // AND A with X with MSB(ADDR)+1, store result into memory
+	INS_SHX, // AND X with MSB(ADDR)+1, store result into memory
+	INS_SHY, // AND Y with MSB(ADDR)+1, store result into memory
+	INS_SLO, // Shift left, OR result with A
+	INS_SRE, // Shift right, XOR result with A
+	INS_TAS, // AND A with X, store result into S, AND S with MSB(ADDR)+1, store result into memory 
 };
 
 typedef struct{
