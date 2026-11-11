@@ -309,7 +309,7 @@ int main(int argc, char *argv[]){
 	}
 	if(opt == OPT_DISASS){
 		readHwVectors(rom);
-		printf("; Dissassembled by fcinfo\n");
+		printf("; Disassembled by fcinfo\n");
 		printf("; Not guaranteed to be valid 6502 assembly; for reference only\n");
 		printf("nmi:\n");
 		disassembleSub(rom, vectors[0]);
