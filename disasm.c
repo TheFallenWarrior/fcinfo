@@ -43,6 +43,7 @@ uint16_t disassemble(FILE *fp, uint16_t addr, char *out, uint16_t n){
 
 	switch(op.addr_mode){
 		case AM_IMPLIED:
+		case AM_BREAK:
 		snprintf(pbuf, 10, " ");
 		break;
 

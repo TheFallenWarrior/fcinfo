@@ -103,12 +103,13 @@ const uint8_t instruction_length[] = {
 	2,
 	2,
 	2,
-	3
+	3,
+	2
 };
 
 const Opcode opcodes[] = {
 	// 0x00 - 0x0F
-	{INS_BRK, AM_IMPLIED},            // 0x00
+	{INS_BRK, AM_BREAK},            // 0x00
 	{INS_ORA, AM_INDEXED_INDIRECT_X}, // 0x01
 	{INS_JAM, AM_IMPLIED},            // 0x02
 	{INS_SLO, AM_INDEXED_INDIRECT_X}, // 0x03

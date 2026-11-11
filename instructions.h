@@ -22,7 +22,8 @@ enum _addressing_modes{
 	AM_RELATIVE,
 	AM_INDEXED_INDIRECT_X,
 	AM_INDIRECT_INDEXED_Y,
-	AM_ABSOLUTE_INDIRECT
+	AM_ABSOLUTE_INDIRECT,
+	AM_BREAK
 };
 
 enum _instructions{
