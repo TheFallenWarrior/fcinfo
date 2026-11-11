@@ -295,7 +295,7 @@ const Opcode opcodes[] = {
 	{INS_LDY, AM_ZEROPAGE},           // 0xA4
 	{INS_LDA, AM_ZEROPAGE},           // 0xA5
 	{INS_LDX, AM_ZEROPAGE},           // 0xA6
-	{INS_LAX, AM_INDEXED_ZEROPAGE_Y}, // 0xA7
+	{INS_LAX, AM_ZEROPAGE},           // 0xA7
 	{INS_TAY, AM_IMPLIED},            // 0xA8
 	{INS_LDA, AM_IMMEDIATE},          // 0xA9
 	{INS_TAX, AM_IMPLIED},            // 0xAA
@@ -327,7 +327,7 @@ const Opcode opcodes[] = {
 	{INS_CPY, AM_IMMEDIATE},          // 0xC0
 	{INS_CMP, AM_INDEXED_INDIRECT_X}, // 0xC1
 	{INS_NOP, AM_IMMEDIATE},          // 0xC2
-	{INS_DCP, AM_INDIRECT_INDEXED_Y}, // 0xC3
+	{INS_DCP, AM_INDEXED_INDIRECT_X}, // 0xC3
 	{INS_CPY, AM_ZEROPAGE},           // 0xC4
 	{INS_CMP, AM_ZEROPAGE},           // 0xC5
 	{INS_DEC, AM_ZEROPAGE},           // 0xC6
@@ -352,7 +352,7 @@ const Opcode opcodes[] = {
 	{INS_DCP, AM_INDEXED_ZEROPAGE_X}, // 0xD7
 	{INS_CLD, AM_IMPLIED},            // 0xD8
 	{INS_CMP, AM_INDEXED_ABSOLUTE_Y}, // 0xD9
-	{INS_NOP, AM_INDEXED_ZEROPAGE_X}, // 0xDA
+	{INS_NOP, AM_IMPLIED},            // 0xDA
 	{INS_DCP, AM_INDEXED_ABSOLUTE_Y}, // 0xDB
 	{INS_NOP, AM_INDEXED_ABSOLUTE_X}, // 0xDC
 	{INS_CMP, AM_INDEXED_ABSOLUTE_X}, // 0xDD
@@ -388,7 +388,7 @@ const Opcode opcodes[] = {
 	{INS_ISC, AM_INDEXED_ZEROPAGE_X}, // 0xF7
 	{INS_SED, AM_IMPLIED},            // 0xF8
 	{INS_SBC, AM_INDEXED_ABSOLUTE_Y}, // 0xF9
-	{INS_NOP, AM_INDEXED_ZEROPAGE_X}, // 0xFA
+	{INS_NOP, AM_IMPLIED},            // 0xFA
 	{INS_ISC, AM_INDEXED_ABSOLUTE_Y}, // 0xFB
 	{INS_NOP, AM_INDEXED_ABSOLUTE_X}, // 0xFC
 	{INS_SBC, AM_INDEXED_ABSOLUTE_X}, // 0xFD
